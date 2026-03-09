@@ -4,7 +4,7 @@ clc
 
 level = 1;
 
-%% Chargement du fichier contenant le signal reçu
+% Chargement du fichier contenant le signal reçu
 load '../data/signal_recu.mat';
 if level > 1
   signal_recu = signal_recu(1:5:end);
@@ -20,15 +20,15 @@ title('Signal brut');
 grid on;
 
 figure;
-plot(signal_reel);
+plot(signal_reel); xlim([1110 1210])
 ylabel('Amplitude');
-title('Signal reel');
+title('Partie réellle');
 grid on;
 
 figure;
-plot(signal_complexe);
+plot(signal_complexe); xlim([1110 1210])
 ylabel('Amplitude');
-title('Signal brut');
+title('Partie imaginaire');
 grid on;
 
 
