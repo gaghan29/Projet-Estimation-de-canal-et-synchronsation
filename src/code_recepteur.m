@@ -59,7 +59,18 @@ h = rcosdesign(alpha, span, Fse, 'sqrt');
 signal_filtre = filtre_adapte(signal_recu);
 
 % Bloc échantillonnage
-signal_ech = signal_filtre(debut_signal:Fse:fin_signal); 
+signal_ech = signal_filtre(debut_signal:Fse:fin_signal);
+
+% Bloc PLL
+[theta_est, delta_est] = PLL(signal_ech);
+
+figure;
+subplot(121); plot(delta_est); title('Fréquence estimée')
+subplot(122); plot(theta_est); title('Phase estimée')
+
+% Bloc de compensation de phase
+
+
 
 %% Affichages 
 
