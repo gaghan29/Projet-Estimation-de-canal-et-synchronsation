@@ -40,19 +40,36 @@ figure;
 plot(dsp); xlim([0 100])
 title('DSP')
 
+% Paramètres filtre
+Fse = 10;
+alpha = 0.3;
+span = 10;
 
-% --- Paramètres à déterminer ---
-Fse = 11; %
 
-% Appliquer le filtre adapté
-signal_filtre = filtre_adapte(signal_recu, Fse);
+h = rcosdesign(alpha, span, Fse, 'sqrt');
 
-% Normalisation pour l'affichage
-signal_filtre = signal_filtre / max(abs(signal_filtre));
+signal_filtre = filtre_adapte(signal_recu);
 
+% Normalisation de l'amplitude pour l'affichage
+%signal_filtre = signal_filtre / max(abs(signal_filtre));
+
+% AFFICHAGE DE LA CONSTELLATION
 figure;
-subplot(121); plot(signal_filtre(1000:2000))
-subplot(122); plot(signal_recu(1000:2000))
+hold on;
+% On affiche les points. Pour une lecture optimale, on devrait 
+% échantillonner tous les Fse, mais ici on affiche tout pour voir la forme.
+plot(real(signal_filtre(1:2000)), imag(signal_filtre(1:2000)), '.');
+grid on;
+axis square;
+xlabel('In-Phase (I)');
+ylabel('Quadrature (Q)');
+title(['Constellation après filtre RRC (Fse = ', num2str(Fse), ')']);
+
+%h = rcosdesign(0.3, 10, 10);
+spectre_filtre = (abs(fftshift(fft(h)))).^2;
+figure;
+plot(spectre_filtre);
+title('Spectre filtre adapté');
 
 
 % Affichage animation
@@ -66,17 +83,19 @@ subplot(122); plot(signal_recu(1000:2000))
 % end
 
 % for j = 1:15
-%     % Appliquer le filtre adapté
+%     Appliquer le filtre adapté
 %     signal_filtre = filtre_adapte(signal_recu, j);
 % 
-%     % Normalisation pour l'affichage
+%     Normalisation pour l'affichage
 %     signal_filtre = signal_filtre / max(abs(signal_filtre));
 % 
 %     figure(1);
 %     plot(signal_filtre(1000:2000));
+%     title(sprintf('Fse =%.2f', j))
 %     drawnow limitrate
-%     pause(1)
+%     pause(2)
 % end
+
 %% Votre récepteur
 % En entrée : signal_recu, signal équivalent à rl(kTe) avec Te le temps
 % d'échantillonnage

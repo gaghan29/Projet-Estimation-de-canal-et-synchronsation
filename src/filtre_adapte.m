@@ -1,15 +1,16 @@
-function rl = filtre_adapte(yl, Fse)
-    % yl : signal d'entrée (complexe)
-    % Fse : Facteur de suréchantillonnage (Samples per Symbol)
+function rl = filtre_adapte(yl)
+    alpha = 0.3;
+    Fse = 10;
+    span = 10;
     
     % Création d'une porte unité de durée T_s
     % On utilise ones(1, Fse) pour couvrir exactement un symbole
-    p1 = hamming(Fse);
+    h = rcosdesign(alpha, span, Fse);
     
     % Normalisation du filtre (pour ne pas changer l'énergie du signal)
-    p1_adapte = conj(p1) / sum(p1);
+    h_adapte = conj(h) / sum(h);
     
     % Convolution
-    % 'same' est parfait ici pour garder l'alignement temporel
-    rl = conv(yl, p1_adapte, 'same'); 
+    % 'same' pour garder l'alignement temporel
+    rl = conv(yl, h_adapte, 'same'); 
 end
