@@ -6,14 +6,14 @@ function [theta_est, delta_est] = PLL(Signal)
     delta_est = zeros(N, 1);
 
     % Filtre de boucle
-    alpha = 0.01;
-    beta = 0.0001;
+    alpha = 0.053;
+    beta = 0.0014;
 
     Signal = Signal.^4;
     for k=2:N
 
         % erreur
-        ek = imag(Signal(k)*exp(-1j*phase_est/4));
+        ek = imag(Signal(k)*exp(-1j*phase_est));
         
         % mise à jour de la fréquence
         freq_est = freq_est + beta*ek;
