@@ -39,37 +39,46 @@ dsp = (abs(fft(signal_p))).^2;
 figure;
 plot(dsp); xlim([0 100])
 title('DSP')
+grid on;
+
+%% Début réception du signal
+
+% Paramètres généraux
+debut_signal = 8; % Points
+fin_signal = 655000; % Points
 
 % Paramètres filtre
 Fse = 10;
 alpha = 0.3;
 span = 10;
 
-
+% Chaine de communication
 h = rcosdesign(alpha, span, Fse, 'sqrt');
 
+% Bloc filtrage adapté
 signal_filtre = filtre_adapte(signal_recu);
 
-% Normalisation de l'amplitude pour l'affichage
-%signal_filtre = signal_filtre / max(abs(signal_filtre));
+% Bloc échantillonnage
+signal_ech = signal_filtre(debut_signal:Fse:fin_signal); 
 
-% AFFICHAGE DE LA CONSTELLATION
+%% Affichages 
+
+% Constéllation
 figure;
 hold on;
-% On affiche les points. Pour une lecture optimale, on devrait 
-% échantillonner tous les Fse, mais ici on affiche tout pour voir la forme.
-plot(real(signal_filtre(1:2000)), imag(signal_filtre(1:2000)), '.');
+plot(real(signal_ech(1:2000)), imag(signal_ech(1:2000)), '.');
 grid on;
 axis square;
 xlabel('In-Phase (I)');
 ylabel('Quadrature (Q)');
 title(['Constellation après filtre RRC (Fse = ', num2str(Fse), ')']);
 
-%h = rcosdesign(0.3, 10, 10);
+% Spectre filtre adapté
 spectre_filtre = (abs(fftshift(fft(h)))).^2;
 figure;
 plot(spectre_filtre);
 title('Spectre filtre adapté');
+grid on;
 
 
 % Affichage animation
