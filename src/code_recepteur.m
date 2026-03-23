@@ -44,7 +44,7 @@ grid on;
 %% Début réception du signal
 
 % Paramètres généraux
-debut_signal = 8; % Points
+debut_signal = 9; % Points
 fin_signal = 655000; % Points
 
 % Paramètres filtre
@@ -56,10 +56,10 @@ span = 10;
 h = rcosdesign(alpha, span, Fse, 'sqrt');
 
 % Bloc filtrage adapté
-signal_filtre = filtre_adapte(signal_recu);
+signal_filtre = filtre_adapte(signal_recu, alpha, Fse, span);
 
 % Bloc échantillonnage
-signal_ech = signal_filtre(debut_signal:Fse:end);
+signal_ech = signal_filtre(debut_signal:Fse:fin_signal);
 
 %Normalisation
 signal_ech = signal_ech / sqrt(mean(abs(signal_ech).^2));
@@ -78,7 +78,7 @@ title('Phase estimée')
 
 % Bloc de compensation de phase
 %signal_comp = signal_ech .* exp(1j*(2*pi*theta_est) + delta_est);  
-signal_comp = signal_ech .* exp(-1j *(theta_est / 4));
+signal_comp = signal_ech .* exp(-1j *(theta_est / 4)).*exp(1j*pi/4);
 
 figure;
 %plot(real(signal_comp), imag(signal_comp),'.');

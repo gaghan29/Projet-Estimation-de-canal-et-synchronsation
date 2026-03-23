@@ -6,8 +6,8 @@ function [theta_est, delta_est] = PLL(Signal)
     delta_est = zeros(N, 1);
 
     % Filtre de boucle
-    alpha = 0.053;
-    beta = 0.0014;
+    alpha = 0.13;
+    beta = 0.01;
 
     Signal = Signal.^4;
     for k=2:N
